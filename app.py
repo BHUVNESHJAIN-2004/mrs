@@ -4,25 +4,19 @@ import pandas as pd
 import numpy as np
 import requests
 import os
+import gdown
 
 # ------------------ DOWNLOAD LARGE FILE ------------------
 
 SIMILARITY_FILE = "similarity.pkl"
-
 GDRIVE_FILE_ID = "1wK_XlGY7trmEbmu7Wp_sB5qzr-CP06yC"
-GDRIVE_URL = f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}"
 
 def download_similarity():
     if not os.path.exists(SIMILARITY_FILE):
         with st.spinner("Downloading recommendation model... ⏳"):
-            response = requests.get(GDRIVE_URL, stream=True)
-            response.raise_for_status()
-            with open(SIMILARITY_FILE, "wb") as f:
-                for chunk in response.iter_content(chunk_size=1024 * 1024):
-                    if chunk:
-                        f.write(chunk)
+            url = f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}"
+            gdown.download(url, SIMILARITY_FILE, quiet=False)
 
-# Download only once
 download_similarity()
 
 # ------------------ LOAD DATA ------------------
